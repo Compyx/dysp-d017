@@ -1,4 +1,4 @@
-# vim: set noet ts=8 sw=8 sts=8
+# vim: set noet ts=8 sw=8 sts=8 :
 #
 # Generic makefile for 64tass based projects
 
@@ -6,12 +6,12 @@
 ASM=64tass
 ASM_FLAGS=-C -a
 
-X64=/usr/local/bin/x64
+X64=x64
 X64_FLAGS=
 
-TARGET=demo.prg
+TARGET=dysp-d017.prg
 MAIN=main.asm
-DEPS=
+DEPS=Training.sid
 
 
 all: $(TARGET)

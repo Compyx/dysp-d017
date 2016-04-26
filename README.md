@@ -22,22 +22,13 @@ The code can be assembled using
 Or simple invoke `make`.
 
 There's an additional target: `make x64`, which will assemble the code and
-then run VICE's x64 binary. Currently it references `/usr/local/bin/x64` my
-copy of the VICE current build, adjust accordingly.
+then run VICE's x64 binary. Currently it only works on Unix-like systems.
 
 
 SID tune
 --------
 
-Currently the code references a tune from the
-[High Voltage SID Collection](http://www.hvsc.c64.org/), located in my home
-directory, so you'll have to comment that out, or alter the reference to point
-to your local copy of the HVSC.
+A tune by JCH is included, taken from the
+[High Voltage SID Collection](http://www.hvsc.c64.org/).
 
-
-TODO
-----
-
-* Make the sid tune optional (using conditional assembly)
-* Don't hardcode the x64 binary in the Makefile
 

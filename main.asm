@@ -13,10 +13,10 @@
 ; 2016-04-22
  
  
-; Music, comment out, or adjust to taste
-music_sid ="/home/compyx/c64/HVSC/MUSICIANS/J/JCH/Training.sid"
-music_init = $1000
-music_play = $1003
+        ; Old school JCH tune
+        music_sid = "Training.sid"
+        music_init = $1000
+        music_play = $1003
  
  
         ; BASIC SYS line
