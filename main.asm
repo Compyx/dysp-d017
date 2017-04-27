@@ -11,20 +11,20 @@
 ; to display a swinging logo during the line crunching.
 ;
 ; 2016-04-22
- 
- 
+
+
         ; Old school JCH tune
         music_sid = "Training.sid"
         music_init = $1000
         music_play = $1003
- 
- 
+
+
         ; BASIC SYS line
         * = $0801
         .word (+), 2016
-        .null $9e, ^start
+        .null $9e, format("%d",start)
 +       .word 0
- 
+
 ; Entry point: generate sprite and set up IRQ
 start
         jsr $fda3
@@ -69,10 +69,10 @@ start
         inc $d019
         cli
         jmp *
- 
+
         ; make sure timing loops don't cross page boundaries
         .align 256
- 
+
 ; 'double IRQ' technique to stabilize raster
 irq1
         pha
@@ -111,7 +111,7 @@ irq2
         cmp $d012
         beq +
 +       ; stable raster here
- 
+
         ; set sprite positions
         lda #$32        ; constant, the Y-movement is done with $d017 magic
         sta $d001
@@ -145,8 +145,8 @@ xmsb    lda #$00
         sta $d01d
         lda #$ff
         sta $d015
- 
- 
+
+
         ldx #09
 -       dex
         bne -
@@ -154,7 +154,7 @@ xmsb    lda #$00
         nop
         nop
         jsr stretcher
- 
+
         lda #$1b
         sta $d011
         lda #0
@@ -183,7 +183,7 @@ xmsb    lda #$00
         tax
         pla
 break   rti
- 
+
 irq3
         pha
         txa
@@ -201,7 +201,7 @@ irq3
         sta $d011
         dec $d020
         jsr music_play
- 
+
         lda #0
         sta $d020
         lda #$2d
@@ -218,8 +218,8 @@ irq3
         tax
         pla
         rti
- 
- 
+
+
 ; Create a single sprite at $0340
 create_sprite
         ldx #0
@@ -229,7 +229,7 @@ create_sprite
         cpx #63
         bne -
         rts
- 
+
 ; Clear the $d017 'stretcher' table by storing $ff in it
 ;
 ; We later mask out bits in this table with the $d017 update routine
@@ -240,8 +240,8 @@ clear_d017_table
         dex
         bpl -
         rts
- 
- 
+
+
 ; Update the $d017 'stretcher' table
 ;
 ; This is what creates the D.Y.S.P. effect
@@ -259,7 +259,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ; sprite 1
         ldx siny_table + 1
         ldy #18
@@ -269,7 +269,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ldx siny_table + 2
         ldy #18
 -       lda d017_table,x
@@ -278,7 +278,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ldx siny_table + 3
         ldy #18
 -       lda d017_table,x
@@ -287,7 +287,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ldx siny_table + 4
         ldy #18
 -       lda d017_table,x
@@ -296,7 +296,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ldx siny_table + 5
         ldy #18
 -       lda d017_table,x
@@ -305,7 +305,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ldx siny_table + 6
         ldy #18
 -       lda d017_table,x
@@ -314,7 +314,7 @@ update_d017_table
         inx
         dey
         bpl -
- 
+
         ; sprite 7
         ldx siny_table + 7
         ldy #18
@@ -325,8 +325,8 @@ update_d017_table
         dey
         bpl -
         rts
- 
- 
+
+
 ; X-movement parameters, two sinus tables added together
 sinx_idx1       .byte 0
 sinx_idx2       .byte 64
@@ -335,15 +335,15 @@ sinx_adc2       .byte 5
 sinx_spd1       .byte $fe
 sinx_spd2       .byte $03
 xmsb_temp       .byte 0
- 
+
 ; Calculate the X-movement of the sprites
 sinus_x
         lda #0
         sta xmsb_temp   ; temporary storage for $d010
- 
+
         ldx sinx_idx1
         ldy sinx_idx2
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -360,7 +360,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -377,7 +377,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -394,7 +394,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -411,7 +411,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -428,7 +428,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -445,7 +445,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -462,7 +462,7 @@ sinus_x
         clc
         adc sinx_adc2
         tay
- 
+
         lda sinus256,x
         clc
         adc sinus88,y
@@ -474,7 +474,7 @@ sinus_x
 +
         lda xmsb_temp
         sta xmsb + 1
- 
+
         lda sinx_idx1
         clc
         adc sinx_spd1
@@ -484,13 +484,13 @@ sinus_x
         adc sinx_spd2
         sta sinx_idx2
         rts
- 
+
 ; Y-movement parameters, a single sinus, for now
 siny_table      .fill 8, 0
 siny_idx        .byte 0
 siny_adc        .byte 16
 siny_spd        .byte 2
- 
+
 sinus_y
         ldy #0
         ldx siny_idx
@@ -510,12 +510,12 @@ sinus_y
         adc siny_spd
         sta siny_idx
         rts
- 
+
 ; Colors for the sprites
 spr_colors
         .byte 1, 7, 13, 15, 14, 4, 6, 9
- 
- 
+
+
 ; Example sprite
 sprite
         .byte 0, 0, 0
@@ -539,12 +539,12 @@ sprite
         .byte %00000000, %11111111, %00000000
         .byte %00000000, %00000000, %00000000
         .byte 0, 0, 0
- 
- 
+
+
         ; make sure we don't cross a page in the stretcher or its data
         .align 256
- 
- 
+
+
 ; The $d017 stretcher
 ;
 ; Basically an FLD with $d017 manipulation and open borders: we use the FLD
@@ -576,7 +576,7 @@ stretcher
         cpx #64
         bne -
         rts
- 
+
 ; Table with values for $d017 in the stretcher
 d017_table
         .fill 64, $ff
@@ -585,21 +585,21 @@ d017_table
 d011_table
         - = range(0, 64, 1)
         .byte <(-) & 7 | $10
- 
+
         ; Don't overwrite music with code/data
         .cerror * > $0fff, "code section too long"
- 
- 
+
+
 ; Link music
         * = $1000
 .binary music_sid, $7e
- 
- 
- 
+
+
+
         * = $2000
 ; Sinus for X-movement
 sinus256        .byte 127.5 + 128 * sin(range(256) * rad(360.0/256))
 sinus88         .byte 42.5 + 43 * sin(range(256) * rad(360.0/256))
- 
+
 ; Sinus for Y-movement
 sinus40         .byte 19.5 + 20 * sin(range(256) * rad(360.0/256))
